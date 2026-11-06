@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>حاتم المحمادي — أخصائي إدارة مخاطر</title>
+<meta name="description" content="أخصائي إدارة مخاطر حاصل على GRCP وGRCA، بخبرة تتجاوز عشر سنوات في المحاسبة والامتثال وتحليل البيانات.">
+<meta name="theme-color" content="#1F2328">
+<meta name="color-scheme" content="light">
+<meta property="og:type" content="profile">
+<meta property="og:title" content="حاتم المحمادي — أخصائي إدارة مخاطر">
+<meta property="og:description" content="GRCP™ · GRCA™ — المخاطر والحوكمة والامتثال وتحليل البيانات بـ Power BI.">
+<meta property="og:image" content="https://hatim-alharbi011.github.io/assets/img/og.png">
+<meta property="og:url" content="https://hatim-alharbi011.github.io/">
+<link rel="canonical" href="https://hatim-alharbi011.github.io/">
+<meta property="og:locale" content="ar_SA">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="assets/fonts/cairo-arabic-800-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/img/hatem-cut.webp" as="image">
+<link rel="preload" href="assets/fonts/cairo-arabic-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="fonts.css">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<a class="skip" href="#deck" data-t="nav.pages"></a>
+
+<header class="top">
+  <a class="mark" href="#home">
+    <svg viewBox="0 0 30 30" aria-hidden="true"><g>
+      <rect x="0" y="0" width="9" height="9" rx="2" fill="#FFB627"/><rect x="10.5" y="0" width="9" height="9" rx="2" fill="#FF8A5B"/><rect x="21" y="0" width="9" height="9" rx="2" fill="#FF5D73"/>
+      <rect x="0" y="10.5" width="9" height="9" rx="2" fill="#9BE3C6"/><rect x="10.5" y="10.5" width="9" height="9" rx="2" fill="#FFB627"/><rect x="21" y="10.5" width="9" height="9" rx="2" fill="#FF8A5B"/>
+      <rect x="0" y="21" width="9" height="9" rx="2" fill="#2EC4B6"/><rect x="10.5" y="21" width="9" height="9" rx="2" fill="#9BE3C6"/><rect x="21" y="21" width="9" height="9" rx="2" fill="#FFB627"/>
+    </g></svg>
+    <span data-t="footer"></span>
+  </a>
+  <div class="top__tools">
+    <button class="tool" id="printBtn" type="button" data-t="nav.print"></button>
+    <button class="tool" id="langBtn" type="button" data-t="nav.lang"></button>
+    <button class="tool tool--main" type="button" data-contact data-t="nav.contact"></button>
+  </div>
+</header>
+
+<main class="deck" id="deck" tabindex="-1">
+
+  <section class="page page--home" id="p-home" role="tabpanel" aria-labelledby="t-home" data-page="home">
+    <div class="home">
+      <div class="home__id">
+        <div class="home__photo"><img id="heroPhoto" alt="" width="816" height="900"></div>
+        <div class="home__txt">
+          <h1 class="home__name" id="heroName"></h1>
+          <p class="home__role"><span id="heroRole"></span><span class="badges" id="heroBadges"></span></p>
+          <p class="home__org" id="heroOrg"></p>
+        </div>
+        <p class="home__line" id="heroLine"></p>
+        <dl class="home__facts" id="heroFacts"></dl>
+        <div class="home__cta">
+          <button class="btn btn--solid" type="button" data-contact data-t="hero.cta"></button>
+          <button class="btn btn--line" type="button" data-go="about" data-t="hero.cta2"></button>
+        </div>
+      </div>
+
+      <figure class="matrix" id="matrix">
+        <figcaption class="matrix__title" data-t="matrix.title"></figcaption>
+        <div class="matrix__body">
+          <div class="matrix__frame">
+            <span class="axis axis--y" data-t="matrix.likelihood"></span>
+            <div class="matrix__grid" id="grid"></div>
+            <span class="axis axis--x" data-t="matrix.impact"></span>
+          </div>
+          <ol class="risks" id="risks"></ol>
+        </div>
+        <div class="matrix__foot">
+          <p class="matrix__readout" id="readout" aria-live="polite"></p>
+          <button class="btn btn--treat" id="treatBtn" type="button" aria-pressed="false"></button>
+        </div>
+        <p class="matrix__note" data-t="matrix.note"></p>
+      </figure>
+    </div>
+  </section>
+
+  <section class="page" id="p-about" role="tabpanel" aria-labelledby="t-about" data-page="about" hidden>
+    <header class="band"><div class="band__in"><h2 class="title" data-t="about.title"></h2></div></header>
+    <div class="wrap about">
+      <div class="prose about__text" id="aboutText"></div>
+      <aside class="idcard" id="idcard"></aside>
+    </div>
+  </section>
+
+  <section class="page" id="p-path" role="tabpanel" aria-labelledby="t-path" data-page="path" hidden>
+    <header class="band"><div class="band__in"><h2 class="title" data-t="path.title"></h2><p data-t="path.intro"></p></div></header>
+    <div class="wrap">
+      <div class="tenure" id="tenure"></div>
+      <div class="rail" id="rail"></div>
+      <article class="stop" id="stopCard" aria-live="polite"></article>
+    </div>
+  </section>
+
+  <section class="page" id="p-certs" role="tabpanel" aria-labelledby="t-certs" data-page="certs" hidden>
+    <header class="band"><div class="band__in"><h2 class="title" data-t="certs.title"></h2><p data-t="certs.intro"></p></div></header>
+    <div class="wrap" id="certsWrap"></div>
+  </section>
+
+  <section class="page" id="p-skills" role="tabpanel" aria-labelledby="t-skills" data-page="skills" hidden>
+    <header class="band"><div class="band__in"><h2 class="title" data-t="skills.title"></h2></div></header>
+    <div class="wrap"><div class="skillcols" id="skills"></div></div>
+  </section>
+
+  <section class="page" id="p-learn" role="tabpanel" aria-labelledby="t-learn" data-page="learn" hidden>
+    <header class="band"><div class="band__in"><h2 class="title" data-t="learn.title"></h2></div></header>
+    <div class="wrap learn" id="learnWrap"></div>
+  </section>
+
+  <section class="page" id="p-work" role="tabpanel" aria-labelledby="t-work" data-page="work" hidden>
+    <header class="band"><div class="band__in"><h2 class="title" data-t="work.title"></h2><p data-t="work.intro"></p></div></header>
+    <div class="wrap">
+      <div class="work">
+        <ul class="thumbs" id="thumbs"></ul>
+        <button class="stage" id="stage" type="button"><img id="stageImg" alt=""></button>
+        <div class="info" id="workInfo" aria-live="polite"></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<nav class="tabs" id="tabsNav">
+  <button class="tabs__arrow" id="prevBtn" type="button"><span aria-hidden="true"></span></button>
+  <div class="tabs__list" role="tablist" id="tablist">
+    <button role="tab" id="t-home" aria-controls="p-home" data-go="home" data-t="nav.home"></button>
+    <button role="tab" id="t-about" aria-controls="p-about" data-go="about" data-t="nav.about"></button>
+    <button role="tab" id="t-path" aria-controls="p-path" data-go="path" data-t="nav.path"></button>
+    <button role="tab" id="t-certs" aria-controls="p-certs" data-go="certs" data-t="nav.certs"></button>
+    <button role="tab" id="t-skills" aria-controls="p-skills" data-go="skills" data-t="nav.skills"></button>
+    <button role="tab" id="t-learn" aria-controls="p-learn" data-go="learn" data-t="nav.learn"></button>
+    <button role="tab" id="t-work" aria-controls="p-work" data-go="work" data-t="nav.work"></button>
+    <span class="tabs__ink" id="ink" aria-hidden="true"></span>
+  </div>
+  <button class="tabs__arrow tabs__arrow--next" id="nextBtn" type="button"><b class="tabs__next" id="nextLbl"></b><span aria-hidden="true"></span></button>
+</nav>
+
+<dialog class="lightbox" id="lightbox">
+  <div class="lightbox__bar">
+    <p class="lightbox__cap" id="lbCap"></p>
+    <div class="lightbox__ctrl">
+      <button type="button" id="lbPrev" class="tool"></button>
+      <button type="button" id="lbNext" class="tool"></button>
+      <button type="button" id="lbClose" class="tool"></button>
+    </div>
+  </div>
+  <img id="lbImg" alt="">
+  <p class="lightbox__count" id="lbCount"></p>
+</dialog>
+
+<dialog class="contact" id="contact" aria-labelledby="contactTitle"></dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="content.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
