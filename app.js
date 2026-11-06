@@ -196,14 +196,18 @@
   }
   function renderTenure(st) {
     const t0 = st[0].start, total = months(t0, null);
-    const off = (s) => (months(t0, s) / total) * 100;
+    const pos = (ym) => (months(t0, ym) / total) * 100;
     const segs = st.map((s, k) => {
       if (!s.start) return "";
-      const a = s.start === t0 ? 0 : off(s.start), w = (months(s.start, s.end) / total) * 100;
-      const lab = w > 9 ? `<span>${esc(durText(months(s.start, s.end)))}</span>` : "";
-      return `<button type="button" class="seg${k === stopI ? " is-on" : ""}" data-stop="${k}" style="--k:${CAT[s.cat]};inset-inline-start:${a}%;width:${w}%" aria-label="${esc(s.role)} — ${esc(durText(months(s.start, s.end)))}">${lab}</button>`;
+      const a = s.start === t0 ? 0 : pos(s.start), w = (months(s.start, s.end) / total) * 100;
+      const label = `${s.role} — ${durText(months(s.start, s.end))}`;
+      return `<button type="button" class="seg${k === stopI ? " is-on" : ""}" data-stop="${k}" style="--k:${CAT[s.cat]};inset-inline-start:${a}%;width:calc(${w}% - 3px)" title="${esc(label)}" aria-label="${esc(label)}"></button>`;
     }).join("");
-    $("#tenure").innerHTML = `<div class="tenure__bar">${segs}</div><div class="tenure__ticks"><span>${t0.slice(0, 4)}</span><span>${new Date().getFullYear()}</span></div>`;
+    const y0 = +t0.slice(0, 4), yN = new Date().getFullYear();
+    const ticks = [];
+    for (let y = y0; y <= yN; y += 1) if (((y - y0) % 4 === 0 && yN - y >= 2) || y === yN) ticks.push(y);
+    const tickHtml = ticks.map((y) => `<span style="inset-inline-start:${y === yN ? 100 : pos(`${y}-${t0.slice(5)}`)}%">${y}</span>`).join("");
+    $("#tenure").innerHTML = `<p class="tenure__cap">${esc(T().path.barLabel || "")}</p><div class="tenure__track">${segs}</div><div class="tenure__ticks">${tickHtml}</div>`;
   }
   function pickStop(k) {
     if (k === stopI) return;

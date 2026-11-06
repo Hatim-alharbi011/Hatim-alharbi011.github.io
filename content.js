@@ -107,6 +107,7 @@ window.SITE = {
     path: {
       title: "الخبرات",
       intro: "من دفاتر الحسابات إلى سجلات المخاطر. اختر محطة لعرض تفاصيلها.",
+      barLabel: "المدة الفعلية لكل محطة",
       units: { y1: "سنة", y2: "سنتان", y: "سنوات", m1: "شهر", m2: "شهران", m: "أشهر", and: " و", now: "حتى الآن" },
       education: { years: "2009", role: "بكالوريوس محاسبة", org: "جامعة أم القرى", dates: "2009 — 2013", cat: "fin", start: "2009-09", end: "2013-06" },
       jobs: [
@@ -362,6 +363,7 @@ window.SITE = {
     path: {
       title: "Experience",
       intro: "From ledgers to risk registers. Pick a stop to see the details.",
+      barLabel: "Actual length of each role",
       units: { y1: "year", y2: "years", y: "years", m1: "month", m2: "months", m: "months", and: " ", now: "present" },
       education: { years: "2009", role: "BSc Accounting", org: "Umm Al-Qura University", dates: "2009 — 2013", cat: "fin", start: "2009-09", end: "2013-06" },
       jobs: [

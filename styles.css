@@ -504,15 +504,17 @@ html[dir="ltr"] .bar-fill{transform-origin:left}
 .home__org{margin:6px 0 0;color:rgba(255,255,255,.68);font-size:.95rem;line-height:1.5;max-width:40ch}
 strong{font-weight:800;color:var(--ink)}
 .page--home strong{color:#fff}
-.tenure{margin:0 0 18px}
-.tenure__bar{position:relative;height:30px;border-radius:8px;background:repeating-linear-gradient(135deg,#E6EAF2 0 6px,#EFF2F8 6px 12px)}
-.seg{all:unset;box-sizing:border-box;position:absolute;top:0;bottom:0;background:var(--k);cursor:pointer;display:grid;place-items:center;font-size:.8rem;font-weight:700;color:var(--ink);opacity:.55;transition:opacity .2s,box-shadow .2s;border-inline-start:2px solid var(--paper)}
-.seg:first-child{border-start-start-radius:8px;border-end-start-radius:8px}
-.seg:hover{opacity:.8}
-.seg.is-on{opacity:1;box-shadow:0 0 0 2px var(--ink)}
-.seg:focus-visible{outline:3px solid var(--saffron);outline-offset:2px}
-.seg span{white-space:nowrap;overflow:hidden;padding:0 6px}
-.tenure__ticks{display:flex;justify-content:space-between;font-size:.78rem;color:var(--ink-3);margin-top:3px}
+.tenure{margin:4px 0 26px;padding:0 10px}
+.tenure__cap{margin:0 0 6px;font-size:.78rem;color:var(--ink-3)}
+.tenure__track{position:relative;height:8px;border-radius:999px;background:#E4E8F0}
+.seg{all:unset;box-sizing:border-box;position:absolute;top:0;height:8px;border-radius:999px;background:var(--k);cursor:pointer;opacity:.45;transition:opacity .25s,transform .25s var(--ease),box-shadow .25s}
+.seg:hover{opacity:.85}
+.seg.is-on{opacity:1;transform:scaleY(1.75);box-shadow:0 0 0 1.5px #fff}
+.seg:focus-visible{outline:3px solid var(--saffron);outline-offset:4px}
+.tenure__ticks{position:relative;height:18px;margin-top:6px}
+.tenure__ticks span{position:absolute;top:0;transform:translateX(50%);font-size:.74rem;color:var(--ink-3);font-variant-numeric:tabular-nums}
+html[dir="ltr"] .tenure__ticks span{transform:translateX(-50%)}
+.tenure__ticks span::before{content:"";position:absolute;top:-6px;left:50%;width:1px;height:4px;background:#C9D0DD}
 .rail .d{font-size:.8rem;color:var(--ink-3);line-height:1.3}
 .stop .meta b{color:var(--ink)}
 .valid{align-self:flex-start;display:inline-flex;align-items:center;gap:6px;font-size:.76rem;font-weight:700;color:#0E6B62;background:#DDF6F2;border-radius:999px;padding:1px 10px;margin-bottom:6px}
