@@ -8,7 +8,7 @@
   const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const get = (o, p) => p.split(".").reduce((x, k) => (x ? x[k] : undefined), o);
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const PAGES = ["home", "about", "path", "certs", "skills", "learn", "work"];
+  const PAGES = ["home", "about", "path", "certs", "skills", "learn", "work", "contact"];
 
   /* ---------- State ---------- */
   let lang = "ar";
@@ -265,13 +265,40 @@
   }
 
   function renderContact() {
-    const ct = T().contact, c = S.contact, links = [];
-    if (c.email) links.push(`<a class="clink is-main" href="mailto:${c.email}">${esc(ct.email)}<small>${esc(c.email)}</small></a>`);
-    if (c.whatsapp) links.push(`<a class="clink" href="https://wa.me/${c.whatsapp}" target="_blank" rel="noopener">${esc(ct.whatsapp)}<small></small></a>`);
-    if (c.linkedin) links.push(`<a class="clink" href="${c.linkedin}" target="_blank" rel="noopener">${esc(ct.linkedin)}<small>linkedin.com</small></a>`);
-    if (c.email) links.push(`<button class="clink" type="button" id="copyMail">${esc(ct.copy)}<small></small></button>`);
-    $("#contact").innerHTML = `<div class="contact__in"><button class="tool contact__close" type="button" id="contactClose">${esc(ct.close)}</button>
-      <h2 id="contactTitle">${esc(ct.title)}</h2><p>${esc(ct.text)}</p><div class="contact__links">${links.join("")}</div></div>`;
+    const t = T(), ct = t.contact, c = S.contact, h = t.hero;
+    const ph = String(c.phone || "").replace(/\D/g, "");
+    const phShow = ph.length === 10 ? `${ph.slice(0, 3)} ${ph.slice(3, 6)} ${ph.slice(6)}` : ph;
+    const telIntl = ph ? "+966" + ph.replace(/^0/, "") : "";
+    const main = [];
+    if (c.email) main.push(`<a class="reach__btn is-main" href="mailto:${c.email}"><span>${esc(ct.email)}</span><small>${esc(c.email)}</small></a>`);
+    if (ph) main.push(`<a class="reach__btn" href="tel:${telIntl}"><span>${esc(ct.call)}</span><small dir="ltr">${esc(phShow)}</small></a>`);
+    if (c.whatsapp) main.push(`<a class="reach__btn" href="https://wa.me/${c.whatsapp}" target="_blank" rel="noopener"><span>${esc(ct.whatsapp)}</span><small></small></a>`);
+    if (c.linkedin) main.push(`<a class="reach__btn" href="${c.linkedin}" target="_blank" rel="noopener"><span>${esc(ct.linkedin)}</span><small>linkedin.com</small></a>`);
+    const cv = S.cv && S.cv[lang], vc = S.vcard && S.vcard[lang];
+    const tools = [
+      cv ? `<a class="reach__tool" href="${cv}" download>${esc(ct.cv)}</a>` : "",
+      vc ? `<a class="reach__tool" href="${vc}" download>${esc(ct.save)}</a>` : "",
+      `<button class="reach__tool" type="button" id="shareBtn">${esc(ct.share)}</button>`,
+      c.email ? `<button class="reach__tool" type="button" id="copyMail">${esc(ct.copy)}</button>` : ""
+    ].join("");
+    const year = new Date().getFullYear();
+    $("#contactWrap").innerHTML = `
+      <div class="reach__main">
+        <h2 class="reach__title">${esc(ct.title)}</h2>
+        <p class="reach__text">${esc(ct.text)}</p>
+        <div class="reach__btns">${main.join("")}</div>
+        <div class="reach__tools">${tools}</div>
+      </div>
+      <aside class="vcard" aria-label="${esc(ct.cardTitle)}">
+        <div class="vcard__top">
+          <div class="vcard__ph"><img src="${S.photo}" alt=""></div>
+          <div><p class="vcard__name">${esc(h.name)}</p><p class="vcard__role">${esc(h.role)}</p></div>
+        </div>
+        <p class="vcard__org">${esc(h.org || "")}</p>
+        <p class="vcard__line"><span class="badges">${h.badges.map((b) => `<b>${esc(b)}</b>`).join("")}</span><span>${esc(h.place)}</span></p>
+        ${S.qr ? `<div class="vcard__qr"><img src="${S.qr}" alt="QR" width="104" height="104"><p>${esc(ct.scan)}</p></div>` : ""}
+      </aside>
+      <p class="reach__foot">© ${year} ${esc(t.footer)} — ${esc(ct.rights)}</p>`;
   }
 
   function render() {
@@ -352,18 +379,21 @@
   /* ---------- Events ---------- */
   document.addEventListener("click", (e) => {
     const g = e.target.closest("[data-go]"); if (g) { e.preventDefault(); go(g.dataset.go); return; }
-    if (e.target.closest("[data-contact]")) { $("#contact").showModal(); return; }
     const s = e.target.closest("[data-set]"); if (s) { openLb(s.dataset.set, +s.dataset.i); return; }
     const st = e.target.closest("[data-stop]"); if (st) { pickStop(+st.dataset.stop); return; }
     const w = e.target.closest("[data-work]"); if (w) { const k = +w.dataset.work; if (k !== workI) { workI = k; showWork(true); } return; }
     const stg = e.target.closest("#stage"); if (stg) { openLb(stg.dataset.lb || "work", stg.dataset.lb === "training" ? 0 : workI); return; }
     const f = e.target.closest("[data-f]"); if (f) { certF = f.dataset.f; renderCerts(); const g = $("#cgrid"); g.classList.remove("is-swap"); void g.offsetWidth; g.classList.add("is-swap"); return; }
-    if (e.target.closest("#contactClose")) { $("#contact").close(); return; }
     if (e.target.closest("#copyMail")) {
       navigator.clipboard.writeText(S.contact.email).then(() => toast(T().contact.copied), () => (location.href = "mailto:" + S.contact.email));
       return;
     }
-    if (e.target === $("#contact")) $("#contact").close();
+    if (e.target.closest("#shareBtn")) {
+      const url = S.site || location.href.split("#")[0];
+      if (navigator.share) navigator.share({ title: T().meta.title, url }).catch(() => {});
+      else navigator.clipboard.writeText(url).then(() => toast(T().contact.shared), () => {});
+      return;
+    }
   });
   $(".mark").addEventListener("click", (e) => { e.preventDefault(); go("home"); });
   $("#prevBtn").addEventListener("click", () => step(-1));
@@ -378,7 +408,6 @@
     if (e.altKey || e.ctrlKey || e.metaKey) return;
     const back = e.key === (rtl() ? "ArrowRight" : "ArrowLeft") ? -1 : 1;
     if (lb.open) { e.preventDefault(); lbStep(back); return; }
-    if ($("#contact").open) return;
     if (e.target.closest("input,textarea,.rail,.thumbs,.filters")) return;
     e.preventDefault();
     step(back);

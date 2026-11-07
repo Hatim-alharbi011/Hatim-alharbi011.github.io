@@ -13,11 +13,14 @@
 window.SITE = {
   contact: {
     email: "h.t.m.1@hotmail.com",
+    phone: "0547413141",               // يظهر في صفحة التواصل وملف السيرة
     whatsapp: "966547413141",          // بدون + أو أصفار في البداية
     linkedin: ""                       // ضع رابط حسابك هنا، مثال: "https://www.linkedin.com/in/your-name"
   },
   site: "https://hatim-alharbi011.github.io",
   photo: "assets/img/hatem-cut.webp",
+  vcard: { ar: "assets/vcard/hatem-almahmadi-ar.vcf", en: "assets/vcard/hatem-almahmadi-en.vcf" },
+  qr: "assets/img/qr.svg",
   cv: { ar: "assets/cv/hatem-almahmadi-cv-ar.pdf", en: "assets/cv/hatem-almahmadi-cv-en.pdf" },
 
   /* صور الشهادات — مشتركة بين اللغتين. أسماؤها في قسم كل لغة (certs.items) بنفس الترتيب */
@@ -291,6 +294,14 @@ window.SITE = {
       title: "لنتحدث",
       text: "إن كانت لديك فرصة في المخاطر أو الحوكمة أو تحليل البيانات، يسعدني أن أسمع منك.",
       close: "إغلاق",
+      call: "اتصال",
+      cv: "تحميل السيرة PDF",
+      save: "حفظ جهة الاتصال",
+      share: "مشاركة الرابط",
+      shared: "تم نسخ رابط الموقع",
+      scan: "امسح الرمز لفتح الموقع على جوالك",
+      cardTitle: "بطاقة تعريف",
+      rights: "جميع الحقوق محفوظة",
       email: "راسلني بالبريد",
       whatsapp: "واتساب",
       linkedin: "لينكدإن",
@@ -547,6 +558,14 @@ window.SITE = {
       title: "Let's talk",
       text: "If you have an opportunity in risk, governance or data analysis, I'd be glad to hear from you.",
       close: "Close",
+      call: "Call",
+      cv: "Download CV (PDF)",
+      save: "Save contact",
+      share: "Share the link",
+      shared: "Website link copied",
+      scan: "Scan to open the website on your phone",
+      cardTitle: "Business card",
+      rights: "All rights reserved",
       email: "Email me",
       whatsapp: "WhatsApp",
       linkedin: "LinkedIn",

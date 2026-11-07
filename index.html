@@ -19,8 +19,8 @@
 <link rel="preload" href="assets/fonts/cairo-arabic-800-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/img/hatem-cut.webp" as="image">
 <link rel="preload" href="assets/fonts/cairo-arabic-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="fonts.css?v=202611062349">
-<link rel="stylesheet" href="styles.css?v=202611062349">
+<link rel="stylesheet" href="fonts.css?v=202611070902">
+<link rel="stylesheet" href="styles.css?v=202611070902">
 </head>
 <body>
 <a class="skip" href="#deck" data-t="nav.pages"></a>
@@ -37,7 +37,7 @@
   <div class="top__tools">
     <button class="tool" id="printBtn" type="button" data-t="nav.print"></button>
     <button class="tool" id="langBtn" type="button" data-t="nav.lang"></button>
-    <button class="tool tool--main" type="button" data-contact data-t="nav.contact"></button>
+    <button class="tool tool--main" type="button" data-go="contact" data-t="nav.contact"></button>
   </div>
 </header>
 
@@ -55,7 +55,7 @@
         <p class="home__line" id="heroLine"></p>
         <dl class="home__facts" id="heroFacts"></dl>
         <div class="home__cta">
-          <button class="btn btn--solid" type="button" data-contact data-t="hero.cta"></button>
+          <button class="btn btn--solid" type="button" data-go="contact" data-t="hero.cta"></button>
           <button class="btn btn--line" type="button" data-go="about" data-t="hero.cta2"></button>
         </div>
       </div>
@@ -121,6 +121,9 @@
       </div>
     </div>
   </section>
+  <section class="page page--dark" id="p-contact" role="tabpanel" aria-labelledby="t-contact" data-page="contact" hidden>
+    <div class="wrap reach" id="contactWrap"></div>
+  </section>
 </main>
 
 <nav class="tabs" id="tabsNav">
@@ -133,6 +136,7 @@
     <button role="tab" id="t-skills" aria-controls="p-skills" data-go="skills" data-t="nav.skills"></button>
     <button role="tab" id="t-learn" aria-controls="p-learn" data-go="learn" data-t="nav.learn"></button>
     <button role="tab" id="t-work" aria-controls="p-work" data-go="work" data-t="nav.work"></button>
+    <button role="tab" id="t-contact" aria-controls="p-contact" data-go="contact" data-t="nav.contact"></button>
     <span class="tabs__ink" id="ink" aria-hidden="true"></span>
   </div>
   <button class="tabs__arrow tabs__arrow--next" id="nextBtn" type="button"><b class="tabs__next" id="nextLbl"></b><span aria-hidden="true"></span></button>
@@ -151,11 +155,10 @@
   <p class="lightbox__count" id="lbCount"></p>
 </dialog>
 
-<dialog class="contact" id="contact" aria-labelledby="contactTitle"></dialog>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script src="content.js?v=202611062349"></script>
-<script src="app.js?v=202611062349"></script>
+<script src="content.js?v=202611070902"></script>
+<script src="app.js?v=202611070902"></script>
 </body>
 </html>
