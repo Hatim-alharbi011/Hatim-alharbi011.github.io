@@ -126,6 +126,7 @@
     renderMatrix();
   }
 
+  const certIdx = (id) => (id == null || id === "" ? -1 : typeof id === "number" ? id : S.certFiles.findIndex((c) => c.id === id));
   function renderAbout() {
     const a = T().about;
     $("#aboutText").innerHTML = a.paragraphs.map((p) => `<p>${esc(p)}</p>`).join("") +
@@ -147,7 +148,7 @@
         <section class="lcard"><h3>${esc(L.volTitle)}</h3><p class="big">${esc(L.vol.name)}</p><p class="meta">${esc(L.vol.meta)}</p><p>${esc(L.vol.text)}</p></section>
       </div>
       <div class="learn__main">
-        <section><h3 class="sub">${esc(L.recentTitle)}</h3><ul class="rows rows--link">${L.recent.map((r) => `<li><b>${esc(r.name)}</b><span>${esc(r.by)}</span><span>${esc(r.meta)}</span>${r.cert != null ? `<button type="button" class="certlink" data-set="certs" data-i="${r.cert}">${esc(L.viewCert)}</button>` : "<i></i>"}</li>`).join("")}</ul></section>
+        <section><h3 class="sub">${esc(L.recentTitle)}</h3><ul class="rows rows--link">${L.recent.map((r) => `<li><b>${esc(r.name)}</b><span>${esc(r.by)}</span><span>${esc(r.meta)}</span>${certIdx(r.cert) >= 0 ? `<button type="button" class="certlink" data-set="certs" data-i="${certIdx(r.cert)}">${esc(L.viewCert)}</button>` : "<i></i>"}</li>`).join("")}</ul></section>
         <section><h3 class="sub">${esc(L.devTitle)}</h3><ul class="rows rows--two">${L.dev.map((r) => `<li><b>${esc(r.name)}</b><span>${esc(r.by)}</span></li>`).join("")}</ul></section>
       </div>`;
   }
@@ -274,9 +275,9 @@
     if (ph) main.push(`<a class="reach__btn" href="tel:${telIntl}"><span>${esc(ct.call)}</span><small dir="ltr">${esc(phShow)}</small></a>`);
     if (c.whatsapp) main.push(`<a class="reach__btn" href="https://wa.me/${c.whatsapp}" target="_blank" rel="noopener"><span>${esc(ct.whatsapp)}</span><small></small></a>`);
     if (c.linkedin) main.push(`<a class="reach__btn" href="${c.linkedin}" target="_blank" rel="noopener"><span>${esc(ct.linkedin)}</span><small>linkedin.com</small></a>`);
-    const cv = S.cv && S.cv[lang], vc = S.vcard && S.vcard[lang];
+    const cv = `cv.html?lang=${lang}`, vc = S.vcard && S.vcard[lang];
     const tools = [
-      cv ? `<a class="reach__tool" href="${cv}" download>${esc(ct.cv)}</a>` : "",
+      `<a class="reach__tool" href="${cv}" target="_blank" rel="noopener">${esc(ct.cv)}</a>`,
       vc ? `<a class="reach__tool" href="${vc}" download>${esc(ct.save)}</a>` : "",
       `<button class="reach__tool" type="button" id="shareBtn">${esc(ct.share)}</button>`,
       c.email ? `<button class="reach__tool" type="button" id="copyMail">${esc(ct.copy)}</button>` : ""
@@ -435,11 +436,7 @@
     try { localStorage.setItem("lang", lang); } catch (e) {}
     render();
   });
-  $("#printBtn").addEventListener("click", () => {
-    const f = S.cv && S.cv[lang];
-    if (!f) { window.print(); return; }
-    const a = document.createElement("a"); a.href = f; a.download = f.split("/").pop(); document.body.appendChild(a); a.click(); a.remove();
-  });
+  $("#printBtn").addEventListener("click", () => window.open(`cv.html?lang=${lang}`, "_blank", "noopener"));
 
   function toast(msg) {
     const t = $("#toast"); t.textContent = msg; t.classList.add("is-on");

@@ -1,0 +1,504 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>لوحة التحكم — موقع السيرة</title>
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="fonts.css">
+<style>
+:root{--ink:#1F2328;--ink2:#4A5672;--ink3:#7B86A0;--line:#DCE2F0;--paper:#F5F7FC;--card:#fff;--mint:#2EC4B6;--saffron:#FFB627;--coral:#FF5D73;--cobalt:#2F5BEA;--r:14px}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"Cairo",system-ui,sans-serif;font-size:15px;line-height:1.6}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--saffron);outline-offset:2px}
+.top{position:sticky;top:0;z-index:20;background:var(--ink);color:#fff;display:flex;align-items:center;gap:10px;padding:10px 16px;flex-wrap:wrap}
+.top h1{margin:0;font-size:1.05rem;font-weight:800;margin-inline-end:auto}
+.top a{color:#fff;opacity:.8;font-size:.9rem}
+.btn{border:0;border-radius:999px;padding:8px 18px;font-weight:700;cursor:pointer;background:#E8ECF5;color:var(--ink)}
+.btn:hover{filter:brightness(.96)}
+.btn--main{background:var(--saffron);color:var(--ink)}
+.btn--dark{background:var(--ink);color:#fff}
+.btn--danger{background:#FFE3E7;color:#B4233A}
+.btn--sm{padding:4px 12px;font-size:.85rem}
+.btn:disabled{opacity:.5;cursor:default}
+.dirty{display:none;font-size:.85rem;background:var(--coral);color:#fff;border-radius:999px;padding:2px 10px}
+.dirty.on{display:inline-block}
+.wrap{max-width:1100px;margin:0 auto;padding:18px 16px 80px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 16px}
+.tabs button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 16px;cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.card{background:var(--card);border-radius:var(--r);padding:16px 18px;margin-bottom:12px;border-top:4px solid var(--k,var(--line))}
+.card h3{margin:0 0 10px;font-size:1.05rem;font-weight:800}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.row3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:10px}
+label.f{display:block;font-size:.82rem;color:var(--ink2)}
+label.f span{display:block;margin-bottom:2px}
+label.f em{font-style:normal;color:var(--ink3)}
+input[type=text],input[type=password],input[type=month],input[type=email],input[type=url],select,textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:7px 10px;background:#fff}
+textarea{min-height:84px;resize:vertical;line-height:1.7}
+input[dir=ltr],textarea[dir=ltr]{text-align:left}
+.tools{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.thumb{width:150px;aspect-ratio:1.414/1;object-fit:contain;background:#fff;border:1px solid var(--line);border-radius:8px}
+.certrow{display:grid;grid-template-columns:160px 1fr;gap:14px}
+.note{background:#FFF4D6;border-radius:12px;padding:10px 14px;margin:0 0 14px;font-size:.92rem}
+.note.warn{background:#FFE3E7}
+.muted{color:var(--ink3);font-size:.85rem}
+.login{max-width:560px;margin:8vh auto;background:#fff;border-radius:20px;padding:26px}
+.login h2{margin:0 0 6px}
+.login ol{padding-inline-start:20px;color:var(--ink2);font-size:.92rem}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 18px;border-radius:999px;z-index:50;opacity:0;transition:opacity .2s;pointer-events:none;max-width:90vw}
+.toast.on{opacity:1}
+.toast.err{background:#B4233A}
+dialog{border:0;border-radius:18px;padding:0;width:min(900px,96vw);max-height:94vh}
+dialog::backdrop{background:rgba(16,18,21,.7)}
+.dlg{padding:18px}
+.cv{position:relative;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#eee;touch-action:none;cursor:crosshair}
+.cv canvas{display:block;width:100%;height:auto}
+.cv .sel{position:absolute;border:2px dashed var(--coral);background:rgba(255,93,115,.15);pointer-events:none;display:none}
+.empty{color:var(--ink3);padding:20px;text-align:center}
+@media (max-width:700px){.row,.row3{grid-template-columns:1fr}.certrow{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(() => {
+"use strict";
+const OWNER = "Hatim-alharbi011", REPO = "Hatim-alharbi011.github.io", BRANCH = "main";
+const CATS = { risk: "مخاطر وامتثال", data: "بيانات وتحليل", fin: "مالية ومحاسبة", people: "تدريب وأفراد" };
+const CATCOL = { risk: "#FF5D73", data: "#2EC4B6", fin: "#FFB627", people: "#2F5BEA" };
+const HEADER = "/* محتوى الموقع — يُدار من لوحة التحكم: https://hatim-alharbi011.github.io/admin.html\n   يمكن تعديله يدويًا أيضًا، لكن يجب أن يبقى بصيغة JSON صحيحة (علامات تنصيص مزدوجة، وفواصل بين العناصر). */\n";
+const $ = (s, r = document) => r.querySelector(s);
+const el = (tag, attrs = {}, ...kids) => {
+  const n = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (v == null || v === false) continue;
+    if (k === "class") n.className = v;
+    else if (k.startsWith("on")) n.addEventListener(k.slice(2), v);
+    else if (k === "style") n.style.cssText = v;
+    else n.setAttribute(k, v === true ? "" : v);
+  }
+  for (const c of kids.flat()) if (c != null && c !== false) n.append(c.nodeType ? c : document.createTextNode(String(c)));
+  return n;
+};
+const toast = (msg, err) => { const t = $("#toast"); t.textContent = msg; t.className = "toast on" + (err ? " err" : ""); clearTimeout(toast.t); toast.t = setTimeout(() => (t.className = "toast"), err ? 6000 : 3000); };
+
+/* ---------- storage (wrapped: may be unavailable) ---------- */
+const store = {
+  get() { try { return localStorage.getItem("gh_token") || sessionStorage.getItem("gh_token") || ""; } catch (e) { return mem.token || ""; } },
+  set(t, remember) { mem.token = t; try { (remember ? localStorage : sessionStorage).setItem("gh_token", t); } catch (e) {} },
+  clear() { mem.token = ""; try { localStorage.removeItem("gh_token"); sessionStorage.removeItem("gh_token"); } catch (e) {} }
+};
+const mem = {};
+
+/* ---------- GitHub API ---------- */
+async function api(path, opts = {}) {
+  const r = await fetch("https://api.github.com" + path, {
+    ...opts,
+    headers: { Accept: "application/vnd.github+json", Authorization: "Bearer " + store.get(), "X-GitHub-Api-Version": "2022-11-28", ...(opts.body ? { "Content-Type": "application/json" } : {}) }
+  });
+  if (!r.ok) { const e = new Error((await r.json().catch(() => ({}))).message || r.statusText); e.status = r.status; throw e; }
+  return r.status === 204 ? null : r.json();
+}
+const b64ToText = (b64) => new TextDecoder().decode(Uint8Array.from(atob(b64.replace(/\n/g, "")), (c) => c.charCodeAt(0)));
+const textToB64 = (txt) => { const bytes = new TextEncoder().encode(txt); let s = ""; for (let i = 0; i < bytes.length; i += 0x8000) s += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000)); return btoa(s); };
+const contentsPath = (p) => `/repos/${OWNER}/${REPO}/contents/${p.split("/").map(encodeURIComponent).join("/")}`;
+async function getFile(p) { const j = await api(contentsPath(p) + "?ref=" + BRANCH + "&t=" + Date.now()); return { sha: j.sha, text: b64ToText(j.content) }; }
+async function getSha(p) { try { return (await api(contentsPath(p) + "?ref=" + BRANCH + "&t=" + Date.now())).sha; } catch (e) { if (e.status === 404) return null; throw e; } }
+async function putFile(p, b64, msg, sha) { return api(contentsPath(p), { method: "PUT", body: JSON.stringify({ message: msg, content: b64, branch: BRANCH, ...(sha ? { sha } : {}) }) }); }
+async function delFile(p, msg) { const sha = await getSha(p); if (sha) await api(contentsPath(p), { method: "DELETE", body: JSON.stringify({ message: msg, sha, branch: BRANCH }) }); }
+
+/* ---------- state ---------- */
+let D = null, contentSha = null, dirty = false, tab = "certs";
+const uploads = new Map();   // path -> { b64, preview }
+const deletions = new Set(); // paths
+const markDirty = () => { dirty = true; const d = $("#dirty"); if (d) d.classList.add("on"); };
+addEventListener("beforeunload", (e) => { if (dirty) { e.preventDefault(); e.returnValue = ""; } });
+
+/* ---------- form helpers ---------- */
+function input(label, obj, key, o = {}) {
+  const tagName = o.area ? "textarea" : "input";
+  const val = o.lines ? (obj[key] || []).join("\n") : (obj[key] ?? "");
+  const ctrl = el(tagName, { type: o.area ? null : (o.type || "text"), dir: o.dir || null, placeholder: o.ph || null, rows: o.rows || null });
+  ctrl.value = val;
+  ctrl.addEventListener("input", () => {
+    if (o.lines) obj[key] = ctrl.value.split("\n").map((s) => s.trim()).filter(Boolean);
+    else obj[key] = ctrl.value;
+    markDirty(); if (o.on) o.on(ctrl.value);
+  });
+  return el("label", { class: "f" }, el("span", {}, label, o.hint ? el("em", {}, " — " + o.hint) : null), ctrl);
+}
+const bi = (label, arObj, enObj, key, o = {}) => el("div", { class: "row" },
+  input(label + " (عربي)", arObj, key, o),
+  input(label + " (English)", enObj, key, { ...o, dir: "ltr", hint: o.lines ? "سطر لكل نقطة · اختياري" : "اختياري" }));
+function select(label, obj, key, options, on) {
+  const s = el("select", {}, ...Object.entries(options).map(([v, t]) => el("option", { value: v }, t)));
+  s.value = obj[key] ?? ""; s.addEventListener("change", () => { obj[key] = s.value; markDirty(); if (on) on(s.value); });
+  return el("label", { class: "f" }, el("span", {}, label), s);
+}
+function check(label, obj, key, on) {
+  const c = el("input", { type: "checkbox" }); c.checked = !!obj[key];
+  c.addEventListener("change", () => { obj[key] = c.checked; markDirty(); if (on) on(c.checked); });
+  return el("label", { class: "f", style: "display:flex;gap:8px;align-items:center" }, c, label);
+}
+function moveIn(arrs, i, d) { for (const a of arrs) { const j = i + d; if (j < 0 || j >= a.length) return false; } for (const a of arrs) { const [x] = a.splice(i, 1); a.splice(i + d, 0, x); } markDirty(); return true; }
+const itemTools = (arrs, i, rerender, onDelete, what) => el("div", { class: "tools" },
+  el("button", { class: "btn btn--sm", type: "button", onclick: () => moveIn(arrs, i, -1) && rerender() }, "↑ أعلى"),
+  el("button", { class: "btn btn--sm", type: "button", onclick: () => moveIn(arrs, i, 1) && rerender() }, "↓ أسفل"),
+  el("button", { class: "btn btn--sm btn--danger", type: "button", onclick: () => { if (!confirm(`حذف ${what}؟ لن يُحذف نهائيًا قبل الضغط على «حفظ ونشر».`)) return; if (onDelete) onDelete(); for (const a of arrs) a.splice(i, 1); markDirty(); rerender(); } }, "حذف"));
+
+/* ---------- views ---------- */
+const VIEWS = {
+  certs: { t: "الشهادات", f: viewCerts },
+  recent: { t: "الدورات الحديثة", f: viewRecent },
+  jobs: { t: "الخبرات", f: viewJobs },
+  skills: { t: "المهارات", f: viewSkills },
+  profile: { t: "الملف والتواصل", f: viewProfile },
+  work: { t: "الأعمال", f: viewWork },
+  adv: { t: "متقدم", f: viewAdvanced }
+};
+
+function shell() {
+  const app = $("#app"); app.innerHTML = "";
+  app.append(
+    el("header", { class: "top" },
+      el("h1", {}, "لوحة التحكم"),
+      el("span", { class: "dirty" + (dirty ? " on" : ""), id: "dirty" }, "تعديلات غير محفوظة"),
+      el("a", { href: "./", target: "_blank", rel: "noopener" }, "فتح الموقع"),
+      el("button", { class: "btn btn--main", type: "button", id: "saveBtn", onclick: save }, "حفظ ونشر"),
+      el("button", { class: "btn btn--sm", type: "button", onclick: () => { if (dirty && !confirm("لديك تعديلات غير محفوظة. الخروج؟")) return; store.clear(); dirty = false; location.reload(); } }, "خروج")),
+    el("main", { class: "wrap" },
+      el("nav", { class: "tabs", role: "tablist" }, ...Object.entries(VIEWS).map(([k, v]) =>
+        el("button", { type: "button", role: "tab", "aria-selected": String(k === tab), onclick: () => { tab = k; shell(); } }, v.t))),
+      el("div", { id: "view" })));
+  VIEWS[tab].f($("#view"));
+}
+
+function viewCerts(v) {
+  const F = D.certFiles, A = D.ar.certs.items, E = D.en.certs.items;
+  v.append(el("p", { class: "note" }, "الشهادات المعلَّمة «مهنية» تظهر في الأعلى. الترتيب هنا هو ترتيب ظهورها في الموقع."));
+  v.append(el("button", { class: "btn btn--dark", type: "button", onclick: () => openCertDialog() }, "+ إضافة شهادة"));
+  v.append(el("div", { style: "height:12px" }));
+  if (!F.length) v.append(el("p", { class: "empty" }, "لا توجد شهادات."));
+  F.forEach((f, i) => {
+    const a = A[i] || (A[i] = { name: "", issuer: "", date: "" }), e = E[i] || (E[i] = { name: "", issuer: "", date: "" });
+    const up = uploads.get(f.img.replace(".jpg", "-t.jpg"));
+    const src = up ? up.preview : f.img.replace(".jpg", "-t.jpg");
+    const card = el("div", { class: "card", style: `--k:${CATCOL[f.cat] || "#ccc"}` },
+      el("div", { class: "certrow" },
+        el("div", {}, el("img", { class: "thumb", src, alt: "" }), el("p", { class: "muted" }, f.id)),
+        el("div", {},
+          bi("اسم الشهادة", a, e, "name"),
+          bi("الجهة المانحة", a, e, "issuer"),
+          bi("التاريخ / المدة", a, e, "date", { ph: "مثال: 18 ساعة · يوليو 2026" }),
+          el("div", { class: "row3" },
+            select("الفئة", f, "cat", CATS, () => { card.style.setProperty("--k", CATCOL[f.cat]); }),
+            check("شهادة مهنية", a, "pro", (c) => { e.pro = c; shell(); }),
+            el("span")),
+          a.pro ? bi("الصلاحية", a, e, "valid", { ph: "مثال: سارية حتى أغسطس 2027" }) : null,
+          itemTools([F, A, E], i, shell, () => {
+            for (const p of [f.img, f.img.replace(".jpg", "-t.jpg"), f.file].filter(Boolean)) { if (uploads.has(p)) uploads.delete(p); else deletions.add(p); }
+            for (const L of ["ar", "en"]) D[L].learn.recent.forEach((r) => { if (r.cert === f.id) r.cert = null; });
+          }, "الشهادة"))));
+    v.append(card);
+  });
+}
+
+function viewRecent(v) {
+  const A = D.ar.learn.recent, E = D.en.learn.recent;
+  const certOpts = { "": "— بلا شهادة —" }; D.certFiles.forEach((f, i) => (certOpts[f.id] = (D.ar.certs.items[i] || {}).name || f.id));
+  v.append(el("p", { class: "note" }, "هذه القائمة تظهر في صفحة «التعليم والتطوير». اربط الدورة بشهادتها ليظهر زر «اعرض الشهادة»."));
+  v.append(el("button", { class: "btn btn--dark", type: "button", onclick: () => { A.unshift({ name: "", by: "", meta: "", cert: null }); E.unshift({ name: "", by: "", meta: "", cert: null }); markDirty(); shell(); } }, "+ إضافة دورة"));
+  v.append(el("div", { style: "height:12px" }));
+  A.forEach((a, i) => {
+    const e = E[i] || (E[i] = { name: "", by: "", meta: "" });
+    v.append(el("div", { class: "card" },
+      bi("اسم الدورة", a, e, "name"), bi("الجهة", a, e, "by"), bi("المدة والتاريخ", a, e, "meta"),
+      select("الشهادة المرتبطة", a, "cert", certOpts, (val) => { a.cert = val || null; e.cert = val || null; }),
+      itemTools([A, E], i, shell, null, "الدورة")));
+  });
+}
+
+function viewJobs(v) {
+  const A = D.ar.path.jobs, E = D.en.path.jobs;
+  v.append(el("p", { class: "note" }, "الأحدث أولًا. تاريخ البداية والنهاية يُستخدمان لحساب المدة تلقائيًا في الشريط الزمني."));
+  v.append(el("button", { class: "btn btn--dark", type: "button", onclick: () => {
+    const blank = () => ({ years: "", cat: "risk", start: "", end: null, role: "", org: "", unit: "", dates: "", points: [] });
+    A.unshift(blank()); E.unshift(blank()); markDirty(); shell(); } }, "+ إضافة وظيفة"));
+  v.append(el("div", { style: "height:12px" }));
+  A.forEach((a, i) => {
+    const e = E[i] || (E[i] = {});
+    const syncShared = () => { e.cat = a.cat; e.start = a.start; e.end = a.end; };
+    const endWrap = el("div");
+    const drawEnd = () => {
+      endWrap.innerHTML = "";
+      const now = el("input", { type: "checkbox" }); now.checked = a.end == null;
+      now.addEventListener("change", () => { a.end = now.checked ? null : (a.start || ""); syncShared(); markDirty(); drawEnd(); });
+      endWrap.append(el("label", { class: "f", style: "display:flex;gap:8px;align-items:center" }, now, "حتى الآن"));
+      if (a.end != null) endWrap.append(input("تاريخ النهاية", a, "end", { type: "month", on: syncShared }));
+    };
+    drawEnd();
+    v.append(el("div", { class: "card", style: `--k:${CATCOL[a.cat]}` },
+      el("h3", {}, a.role || "وظيفة جديدة"),
+      bi("المسمى الوظيفي", a, e, "role"), bi("جهة العمل", a, e, "org"), bi("الإدارة / المدينة", a, e, "unit"),
+      bi("الفترة كما تظهر", a, e, "dates", { ph: "مثال: يونيو 2026 — حتى الآن" }),
+      bi("السنوات المختصرة", a, e, "years", { ph: "مثال: 2026 — الآن" }),
+      el("div", { class: "row3" }, select("الفئة", a, "cat", CATS, syncShared), input("تاريخ البداية", a, "start", { type: "month", on: syncShared }), endWrap),
+      bi("المهام والإنجازات", a, e, "points", { area: true, lines: true, rows: 6, hint: "سطر لكل نقطة · **نص** يظهر عريضًا" }),
+      bi("عنوان التكليف الإضافي", a, e, "extraTitle", { hint: "اختياري" }),
+      bi("نقاط التكليف الإضافي", a, e, "extra", { area: true, lines: true }),
+      itemTools([A, E], i, shell, null, "الوظيفة")));
+  });
+}
+
+function viewSkills(v) {
+  const A = D.ar.skills.groups, E = D.en.skills.groups;
+  v.append(el("button", { class: "btn btn--dark", type: "button", onclick: () => { A.push({ title: "", cat: "data", points: [], tools: [] }); E.push({ title: "", cat: "data", points: [], tools: [] }); markDirty(); shell(); } }, "+ إضافة مجموعة مهارات"));
+  v.append(el("div", { style: "height:12px" }));
+  A.forEach((a, i) => {
+    const e = E[i] || (E[i] = {});
+    v.append(el("div", { class: "card", style: `--k:${CATCOL[a.cat]}` },
+      bi("عنوان المجموعة", a, e, "title"),
+      select("الفئة (اللون)", a, "cat", CATS, (c) => { e.cat = c; }),
+      bi("النقاط", a, e, "points", { area: true, lines: true, rows: 4, hint: "سطر لكل نقطة · **كلمة:** تظهر عريضة" }),
+      bi("الأدوات", a, e, "tools", { area: true, lines: true, rows: 3, hint: "سطر لكل أداة" }),
+      itemTools([A, E], i, shell, null, "المجموعة")));
+  });
+}
+
+function viewProfile(v) {
+  const a = D.ar, e = D.en, c = D.contact;
+  v.append(el("div", { class: "card" }, el("h3", {}, "الواجهة"),
+    bi("الاسم", a.hero, e.hero, "name"), bi("المسمى", a.hero, e.hero, "role"), bi("جهة العمل", a.hero, e.hero, "org"),
+    bi("السطر التعريفي", a.hero, e.hero, "line", { area: true, rows: 2 }), bi("المدينة", a.hero, e.hero, "place")));
+  const facts = el("div", { class: "card" }, el("h3", {}, "الحقائق الثلاث في الرئيسية"));
+  a.hero.facts.forEach((f, i) => { const g = e.hero.facts[i] || (e.hero.facts[i] = {}); facts.append(el("div", { class: "row" }, input("القيمة " + (i + 1), f, "v", { on: (x) => { if (!g.v) g.v = x; } }), input("الوصف (عربي)", f, "k"))); facts.append(input("الوصف (English)", g, "k", { dir: "ltr" })); });
+  v.append(facts);
+  v.append(el("div", { class: "card" }, el("h3", {}, "النبذة"),
+    el("div", { class: "row" },
+      paragraphs("فقرات النبذة (عربي)", a.about, "paragraphs"),
+      paragraphs("About paragraphs (English)", e.about, "paragraphs", "ltr"))));
+  const card = el("div", { class: "card" }, el("h3", {}, "بطاقة التعريف (صفحة نبذة)"));
+  a.about.card.forEach((r, i) => { const g = e.about.card[i] || (e.about.card[i] = {}); card.append(el("div", { class: "row" }, input("العنوان", r, "k"), input("القيمة", r, "v")), el("div", { class: "row" }, input("Label", g, "k", { dir: "ltr" }), input("Value", g, "v", { dir: "ltr" }))); });
+  v.append(card);
+  v.append(el("div", { class: "card" }, el("h3", {}, "التواصل"),
+    el("div", { class: "row" }, input("البريد", c, "email", { type: "email", dir: "ltr" }), input("الجوال", c, "phone", { dir: "ltr", ph: "05xxxxxxxx" })),
+    el("div", { class: "row" }, input("واتساب (بالصيغة الدولية بلا +)", c, "whatsapp", { dir: "ltr", ph: "9665xxxxxxxx" }), input("رابط لينكدإن", c, "linkedin", { type: "url", dir: "ltr", ph: "https://www.linkedin.com/in/..." }))));
+  const hl = el("div", { class: "card" }, el("h3", {}, "إنجازات مختارة (في ملف السيرة)"));
+  (a.cvHighlights || []).forEach((h, i) => { const g = e.cvHighlights[i] || (e.cvHighlights[i] = {}); hl.append(el("div", { class: "row" }, input("الرقم", h, "v", { on: (x) => (g.v = x) }), input("الوصف (عربي)", h, "k")), input("الوصف (English)", g, "k", { dir: "ltr" })); });
+  v.append(hl);
+}
+function paragraphs(label, obj, key, dir) {
+  const t = el("textarea", { rows: 8, dir: dir || null }); t.value = (obj[key] || []).join("\n\n");
+  t.addEventListener("input", () => { obj[key] = t.value.split(/\n\s*\n/).map((s) => s.trim()).filter(Boolean); markDirty(); });
+  return el("label", { class: "f" }, el("span", {}, label, el("em", {}, " — سطر فارغ بين كل فقرة")), t);
+}
+
+function viewWork(v) {
+  const a = D.ar.work, e = D.en.work;
+  v.append(el("p", { class: "note" }, "تعديل نصوص صفحة الأعمال. لاستبدال صور اللوحات تواصل مع من صمّم الموقع، لأن الأرقام فيها تحتاج تمويهًا دقيقًا."));
+  v.append(el("div", { class: "card" }, el("h3", {}, "مقدمة الصفحة"), bi("المقدمة", a, e, "intro", { area: true, rows: 2 })));
+  v.append(el("div", { class: "card" }, el("h3", {}, "دراسة الحالة"),
+    bi("العنوان", a.caseStudy, e.caseStudy, "title"), bi("المشكلة", a.caseStudy, e.caseStudy, "problem", { area: true, rows: 3 }),
+    bi("الخطوات", a.caseStudy, e.caseStudy, "steps", { area: true, lines: true, rows: 4 }), bi("النتيجة", a.caseStudy, e.caseStudy, "result")));
+  a.gallery.forEach((g, i) => { const h = e.gallery[i] || (e.gallery[i] = {}); v.append(el("div", { class: "card" }, el("h3", {}, "لوحة " + (i + 1)), bi("العنوان", g, h, "title"), bi("الوصف", g, h, "note", { area: true, rows: 2 }))); });
+  v.append(el("div", { class: "card" }, el("h3", {}, "التدريب الذي قدّمته"),
+    bi("العنوان", a.training, e.training, "title"), bi("التاريخ", a.training, e.training, "dates"), bi("الوصف", a.training, e.training, "text", { area: true, rows: 3 })));
+}
+
+function viewAdvanced(v) {
+  v.append(el("p", { class: "note warn" }, "تحرير مباشر لكل محتوى الموقع بصيغة JSON. استخدمه فقط لما لا تجده في الأقسام الأخرى. أي خطأ في الصيغة يُرفض قبل الحفظ."));
+  const t = el("textarea", { dir: "ltr", rows: 28, style: "font-family:monospace;font-size:12px" }); t.value = JSON.stringify(D, null, 2);
+  v.append(t, el("div", { class: "tools" }, el("button", { class: "btn btn--dark", type: "button", onclick: () => {
+    try { const x = JSON.parse(t.value); if (!x.ar || !x.en || !x.certFiles) throw new Error("ينقص ar أو en أو certFiles"); D = x; markDirty(); toast("طُبّق. اضغط «حفظ ونشر» للنشر."); }
+    catch (err) { toast("خطأ في الصيغة: " + err.message, true); } } }, "تطبيق")));
+}
+
+/* ---------- add certificate (with blur tool) ---------- */
+let pdfjs = null;
+function loadPdfJs() {
+  if (pdfjs) return Promise.resolve(pdfjs);
+  return new Promise((res, rej) => {
+    const s = document.createElement("script");
+    s.src = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js";
+    s.onload = () => { window.pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js"; pdfjs = window.pdfjsLib; res(pdfjs); };
+    s.onerror = () => rej(new Error("تعذّر تحميل قارئ PDF"));
+    document.head.append(s);
+  });
+}
+async function fileToCanvas(file) {
+  const c = document.createElement("canvas"), ctx = c.getContext("2d");
+  if (file.type === "application/pdf" || /\.pdf$/i.test(file.name)) {
+    const lib = await loadPdfJs();
+    const pdf = await lib.getDocument({ data: await file.arrayBuffer() }).promise;
+    const page = await pdf.getPage(1);
+    const vp1 = page.getViewport({ scale: 1 }), scale = 1600 / Math.max(vp1.width, vp1.height);
+    const vp = page.getViewport({ scale });
+    c.width = Math.round(vp.width); c.height = Math.round(vp.height);
+    ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, c.width, c.height);
+    await page.render({ canvasContext: ctx, viewport: vp }).promise;
+    return c;
+  }
+  const url = URL.createObjectURL(file);
+  try {
+    const img = await new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = () => rej(new Error("صيغة الصورة غير مدعومة. استخدم JPG أو PNG أو PDF.")); i.src = url; });
+    const k = Math.min(1, 1600 / Math.max(img.naturalWidth, img.naturalHeight));
+    c.width = Math.round(img.naturalWidth * k); c.height = Math.round(img.naturalHeight * k);
+    ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, c.width, c.height); ctx.drawImage(img, 0, 0, c.width, c.height);
+    return c;
+  } finally { URL.revokeObjectURL(url); }
+}
+function pixelate(c, x, y, w, h) {
+  const ctx = c.getContext("2d");
+  const bs = Math.max(8, Math.round(Math.min(w, h) / 3));
+  const t = document.createElement("canvas"); t.width = Math.max(1, Math.round(w / bs)); t.height = Math.max(1, Math.round(h / bs));
+  const tc = t.getContext("2d"); tc.imageSmoothingEnabled = true; tc.drawImage(c, x, y, w, h, 0, 0, t.width, t.height);
+  ctx.imageSmoothingEnabled = false; ctx.drawImage(t, 0, 0, t.width, t.height, x, y, w, h); ctx.imageSmoothingEnabled = true;
+}
+const canvasToB64 = (c, maxSide, q) => {
+  const k = Math.min(1, maxSide / Math.max(c.width, c.height));
+  const o = document.createElement("canvas"); o.width = Math.round(c.width * k); o.height = Math.round(c.height * k);
+  const ctx = o.getContext("2d"); ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, o.width, o.height); ctx.drawImage(c, 0, 0, o.width, o.height);
+  const url = o.toDataURL("image/jpeg", q); return { url, b64: url.split(",")[1] };
+};
+function nextCertId() {
+  let n = 0; const all = [...D.certFiles.map((f) => f.id), ...[...uploads.keys()].map((p) => (p.match(/c(\d+)\.jpg$/) || [])[0])];
+  for (const id of all) { const m = String(id || "").match(/c(\d+)/); if (m) n = Math.max(n, +m[1]); }
+  return "c" + String(n + 1).padStart(2, "0");
+}
+function openCertDialog() {
+  const dlg = el("dialog"); document.body.append(dlg);
+  let canvas = null; const history = [];
+  const meta = { ar: { name: "", issuer: "", date: "" }, en: { name: "", issuer: "", date: "" }, cat: "data" };
+  const area = el("div", { class: "cv" }, el("p", { class: "empty" }, "اختر ملف الشهادة أولًا (PDF أو صورة)"));
+  const sel = el("div", { class: "sel" });
+  const confirmBox = el("input", { type: "checkbox" });
+  const fileIn = el("input", { type: "file", accept: "application/pdf,image/jpeg,image/png,image/webp" });
+  fileIn.addEventListener("change", async () => {
+    const f = fileIn.files[0]; if (!f) return;
+    area.innerHTML = ""; area.append(el("p", { class: "empty" }, "جاري التحميل…"));
+    try { canvas = await fileToCanvas(f); history.length = 0; area.innerHTML = ""; area.append(canvas, sel); }
+    catch (err) { area.innerHTML = ""; area.append(el("p", { class: "empty" }, err.message)); }
+  });
+  let start = null;
+  const pt = (ev) => { const r = canvas.getBoundingClientRect(); return { x: (ev.clientX - r.left) * (canvas.width / r.width), y: (ev.clientY - r.top) * (canvas.height / r.height), cx: ev.clientX - r.left, cy: ev.clientY - r.top }; };
+  area.addEventListener("pointerdown", (ev) => { if (!canvas || ev.target !== canvas) return; start = pt(ev); area.setPointerCapture(ev.pointerId); Object.assign(sel.style, { display: "block", left: start.cx + "px", top: start.cy + "px", width: "0", height: "0" }); });
+  area.addEventListener("pointermove", (ev) => { if (!start) return; const p = pt(ev); Object.assign(sel.style, { left: Math.min(p.cx, start.cx) + "px", top: Math.min(p.cy, start.cy) + "px", width: Math.abs(p.cx - start.cx) + "px", height: Math.abs(p.cy - start.cy) + "px" }); });
+  area.addEventListener("pointerup", (ev) => {
+    if (!start) return; const p = pt(ev); sel.style.display = "none";
+    const x = Math.max(0, Math.min(p.x, start.x)), y = Math.max(0, Math.min(p.y, start.y)), w = Math.abs(p.x - start.x), h = Math.abs(p.y - start.y); start = null;
+    if (w < 6 || h < 6) return;
+    history.push(canvas.getContext("2d").getImageData(0, 0, canvas.width, canvas.height)); pixelate(canvas, x, y, w, h);
+  });
+  const add = () => {
+    if (!canvas) return toast("اختر ملف الشهادة أولًا", true);
+    if (!meta.ar.name.trim()) return toast("اكتب اسم الشهادة بالعربي", true);
+    if (!confirmBox.checked) return toast("أكّد أنك أخفيت رقم الهوية والجوال", true);
+    const id = nextCertId(), img = `assets/certs/${id}.jpg`, th = `assets/certs/${id}-t.jpg`;
+    const big = canvasToB64(canvas, 1400, 0.8), small = canvasToB64(canvas, 520, 0.78);
+    uploads.set(img, { b64: big.b64, preview: big.url }); uploads.set(th, { b64: small.b64, preview: small.url });
+    const fillEn = (k) => meta.en[k] || meta.ar[k];
+    // professional certs stay first; new course certs go to the top of the course list
+    const firstCourse = D.ar.certs.items.findIndex((x) => !x.pro); const at = firstCourse < 0 ? D.certFiles.length : firstCourse;
+    D.certFiles.splice(at, 0, { cat: meta.cat, img, id });
+    D.ar.certs.items.splice(at, 0, { ...meta.ar });
+    D.en.certs.items.splice(at, 0, { name: fillEn("name"), issuer: fillEn("issuer"), date: fillEn("date") });
+    markDirty(); dlg.close(); dlg.remove(); tab = "certs"; shell(); toast("أُضيفت الشهادة. اضغط «حفظ ونشر» لنشرها.");
+  };
+  dlg.append(el("div", { class: "dlg" },
+    el("h3", { style: "margin:0 0 8px" }, "إضافة شهادة"),
+    el("p", { class: "note warn" }, "⚠️ قبل الحفظ: اسحب بالماوس أو بإصبعك مستطيلًا فوق رقم الهوية أو الجوال أو أي بيانات شخصية لتمويهها. الموقع عام ويراه الجميع."),
+    el("label", { class: "f" }, el("span", {}, "ملف الشهادة"), fileIn),
+    el("div", { style: "height:8px" }), area,
+    el("div", { class: "tools" }, el("button", { class: "btn btn--sm", type: "button", onclick: () => { if (canvas && history.length) canvas.getContext("2d").putImageData(history.pop(), 0, 0); } }, "تراجع عن آخر تمويه")),
+    el("div", { style: "height:10px" }),
+    bi("اسم الشهادة", meta.ar, meta.en, "name"), bi("الجهة المانحة", meta.ar, meta.en, "issuer"),
+    bi("التاريخ / المدة", meta.ar, meta.en, "date", { ph: "مثال: 12 ساعة · مارس 2026" }),
+    select("الفئة", meta, "cat", CATS),
+    el("label", { class: "f", style: "display:flex;gap:8px;align-items:center;margin:12px 0" }, confirmBox, "تأكدت من إخفاء رقم الهوية والجوال وأي بيانات شخصية"),
+    el("div", { class: "tools" }, el("button", { class: "btn btn--main", type: "button", onclick: add }, "إضافة"), el("button", { class: "btn", type: "button", onclick: () => { dlg.close(); dlg.remove(); } }, "إلغاء"))));
+  dlg.showModal();
+}
+
+/* ---------- save ---------- */
+function fillEnglish(ar, en) {
+  if (Array.isArray(ar) && Array.isArray(en)) { ar.forEach((x, i) => { if (en[i] == null || en[i] === "") en[i] = typeof x === "object" ? JSON.parse(JSON.stringify(x)) : x; else fillEnglish(x, en[i]); }); return; }
+  if (ar && en && typeof ar === "object" && typeof en === "object") for (const k of Object.keys(ar)) {
+    if (en[k] == null || en[k] === "" || (Array.isArray(en[k]) && !en[k].length && Array.isArray(ar[k]) && ar[k].length)) en[k] = JSON.parse(JSON.stringify(ar[k]));
+    else fillEnglish(ar[k], en[k]);
+  }
+}
+async function bumpVersion(path, v) {
+  const f = await getFile(path); const t = f.text.replace(/\?v=\d+/g, "?v=" + v);
+  if (t !== f.text) await putFile(path, textToB64(t), "تحديث رقم الإصدار", f.sha);
+}
+async function save() {
+  if (!dirty && !uploads.size && !deletions.size) return toast("لا توجد تعديلات");
+  const btn = $("#saveBtn"); btn.disabled = true; btn.textContent = "جاري النشر…";
+  try {
+    fillEnglish(D.ar, D.en);
+    for (const [p, u] of uploads) { await putFile(p, u.b64, "إضافة ملف من لوحة التحكم: " + p, await getSha(p)); }
+    for (const p of deletions) { await delFile(p, "حذف ملف من لوحة التحكم: " + p); }
+    const txt = HEADER + "window.SITE = " + JSON.stringify(D, null, 2) + ";\n";
+    const r = await putFile("content.js", textToB64(txt), "تحديث المحتوى من لوحة التحكم", contentSha);
+    contentSha = r.content.sha;
+    const v = new Date().toISOString().replace(/\D/g, "").slice(0, 12);
+    await bumpVersion("index.html", v); await bumpVersion("cv.html", v);
+    uploads.clear(); deletions.clear(); dirty = false;
+    shell(); toast("تم النشر. يظهر التحديث في الموقع خلال دقيقة إلى دقيقتين.");
+  } catch (err) {
+    if (err.status === 409) toast("المحتوى تغيّر من مكان آخر. أعد تحميل الصفحة ثم كرر التعديل.", true);
+    else if (err.status === 401) toast("المفتاح غير صالح أو انتهت صلاحيته. اخرج وأدخل مفتاحًا جديدًا.", true);
+    else toast("تعذّر الحفظ: " + err.message, true);
+  } finally { const b = $("#saveBtn"); if (b) { b.disabled = false; b.textContent = "حفظ ونشر"; } }
+}
+
+/* ---------- login & load ---------- */
+async function load() {
+  const f = await getFile("content.js");
+  const t = f.text, s = t.indexOf("{", t.indexOf("window.SITE")), e = t.lastIndexOf("}");
+  D = JSON.parse(t.slice(s, e + 1)); contentSha = f.sha;
+  D.ar.cvHighlights = D.ar.cvHighlights || []; D.en.cvHighlights = D.en.cvHighlights || [];
+}
+function loginView(msg) {
+  const tok = el("input", { type: "password", dir: "ltr", placeholder: "github_pat_…", autocomplete: "off" });
+  const remember = el("input", { type: "checkbox" }); remember.checked = true;
+  const go = async () => {
+    const t = tok.value.trim(); if (!t) return;
+    store.set(t, remember.checked);
+    try {
+      const repo = await api(`/repos/${OWNER}/${REPO}`);
+      if (!repo.permissions || !repo.permissions.push) throw Object.assign(new Error("المفتاح لا يملك صلاحية الكتابة على المستودع"), { status: 403 });
+      await load(); shell();
+    } catch (err) { store.clear(); loginView(err.status === 401 ? "المفتاح غير صحيح." : err.message); }
+  };
+  tok.addEventListener("keydown", (e) => { if (e.key === "Enter") go(); });
+  const app = $("#app"); app.innerHTML = "";
+  app.append(el("div", { class: "login" },
+    el("h2", {}, "لوحة تحكم موقع السيرة"),
+    el("p", { class: "muted" }, "الدخول بمفتاح GitHub خاص بمستودع الموقع."),
+    msg ? el("p", { class: "note warn" }, msg) : null,
+    el("label", { class: "f" }, el("span", {}, "المفتاح"), tok),
+    el("label", { class: "f", style: "display:flex;gap:8px;align-items:center;margin:10px 0" }, remember, "تذكّرني على هذا الجهاز"),
+    el("button", { class: "btn btn--main", type: "button", onclick: go }, "دخول"),
+    el("details", { style: "margin-top:18px" }, el("summary", {}, "كيف أنشئ المفتاح؟"),
+      el("ol", {},
+        el("li", {}, "افتح ", el("a", { href: "https://github.com/settings/personal-access-tokens/new", target: "_blank", rel: "noopener" }, "صفحة إنشاء مفتاح جديد"), " في GitHub."),
+        el("li", {}, "الاسم: لوحة الموقع. مدة الصلاحية: سنة."),
+        el("li", {}, "Repository access: اختر Only select repositories ثم Hatim-alharbi011.github.io."),
+        el("li", {}, "Permissions ← Repository permissions ← Contents: Read and write."),
+        el("li", {}, "اضغط Generate token، وانسخ المفتاح والصقه هنا."))),
+    el("p", { class: "muted", style: "margin-top:12px" }, "المفتاح يُحفظ في متصفح هذا الجهاز فقط. لإلغائه: GitHub ← Settings ← Developer settings ← Personal access tokens.")));
+}
+(async () => {
+  if (!store.get()) return loginView();
+  try { await load(); shell(); } catch (err) { store.clear(); loginView(err.status === 401 ? "انتهت صلاحية المفتاح. أدخل مفتاحًا جديدًا." : "تعذّر التحميل: " + err.message); }
+})();
+})();
+</script>
+</body>
+</html>
