@@ -20,7 +20,6 @@ window.SITE = {
   site: "https://hatim-alharbi011.github.io",
   photo: "assets/img/hatem-cut.webp",
   vcard: { ar: "assets/vcard/hatem-almahmadi-ar.vcf", en: "assets/vcard/hatem-almahmadi-en.vcf" },
-  qr: "assets/img/qr.svg",
   cv: { ar: "assets/cv/hatem-almahmadi-cv-ar.pdf", en: "assets/cv/hatem-almahmadi-cv-en.pdf" },
 
   /* صور الشهادات — مشتركة بين اللغتين. أسماؤها في قسم كل لغة (certs.items) بنفس الترتيب */
