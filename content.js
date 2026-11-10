@@ -120,7 +120,7 @@ window.SITE = {
   "ar": {
     "meta": {
       "title": "حاتم المحمادي — أخصائي إدارة مخاطر",
-      "description": "أخصائي إدارة مخاطر حاصل على GRCP وGRCA، بخبرة تتجاوز عشر سنوات في المحاسبة والتقارير المالية والالتزام وتحليل البيانات."
+      "description": "أخصائي إدارة مخاطر حاصل على GRCP وGRCA، بخبرة تتجاوز اثنتي عشرة سنة في المحاسبة والتقارير المالية والالتزام وتحليل البيانات."
     },
     "nav": {
       "home": "الرئيسية",
@@ -152,27 +152,27 @@ window.SITE = {
         "GRCP™",
         "GRCA™"
       ],
-      "line": "أستند إلى خبرتي المالية، وأوظّف البيانات والأدوات الرقمية لفهم التحديات وبناء حلول عملية تدعم جودة العمليات والقرارات.",
+      "line": "أستند إلى خلفيتي المالية، وأوظّف البيانات والأدوات الرقمية لفهم المخاطر وبناء حلول عملية تدعم جودة العمليات وسلامة القرارات.",
       "place": "مكة المكرمة، المملكة العربية السعودية",
       "cta": "تواصل معي",
       "cta2": "تعرّف عليّ",
       "facts": [
         {
-          "v": "+10",
-          "k": "سنوات في المالية والالتزام"
+          "v": "+12",
+          "k": "سنة خبرة مهنية"
         },
         {
-          "v": "GRCP · GRCA",
-          "k": "شهادتان مهنيتان من OCEG"
+          "v": "1,961",
+          "k": "صكًا وقفيًا حصرتُها آليًا"
         },
         {
-          "v": "1447هـ",
+          "v": "1447 هـ",
           "k": "جائزة العمل المتميز"
         }
       ]
     },
     "matrix": {
-      "title": "خمسة مخاطر عالجتها فعلًا",
+      "title": "خمس مخاطر عالجتُها فعلًا",
       "likelihood": "الاحتمال",
       "impact": "الأثر",
       "treat": "طبّق المعالجة",
@@ -189,7 +189,7 @@ window.SITE = {
       "risks": [
         {
           "type": "بيانات",
-          "label": "بيانات صكوك الأوقاف مبعثرة ولا يمكن حصرها",
+          "label": "بيانات صكوك الأوقاف مبعثرة ويتعذّر حصرها",
           "treatment": "لوحة Power BI حصرت 1,961 صكًا وصنّفتها آليًا",
           "from": [
             5,
@@ -203,8 +203,8 @@ window.SITE = {
         },
         {
           "type": "امتثال",
-          "label": "أخطاء متراكمة في إقرارات ضريبة القيمة المضافة",
-          "treatment": "تصحيح الإقرارات من 2018 إلى 2024 ضمن لجنة رئيسية",
+          "label": "مخاطر عدم الالتزام في إقرارات ضريبة القيمة المضافة",
+          "treatment": "مراجعة الإقرارات وتصحيحها ضمن لجنة متخصصة",
           "from": [
             4,
             5
@@ -262,7 +262,7 @@ window.SITE = {
     "about": {
       "title": "نبذة",
       "paragraphs": [
-        "أخصائي إدارة مخاطر بخبرة مهنية تتجاوز عشر سنوات في المحاسبة والتقارير المالية والالتزام وتحليل البيانات. أعمل حاليًا في إدارة المخاطر المؤسسية، وأسهم في تحديد المخاطر وتقييمها ومتابعتها، وتطوير سجلات المخاطر وخطط المعالجة، وإعداد التقارير الداعمة لاتخاذ القرار.",
+        "أخصائي إدارة مخاطر بخبرة مهنية تتجاوز اثنتي عشرة سنة في المحاسبة والتقارير المالية والالتزام وتحليل البيانات. أعمل حاليًا في إدارة المخاطر المؤسسية، وأسهم في تحديد المخاطر وتقييمها ومتابعتها، وتطوير سجلات المخاطر وخطط المعالجة، وإعداد التقارير الداعمة لاتخاذ القرار.",
         "أستفيد من خلفيتي المالية والتحليلية في فهم المخاطر والضوابط وربطها بالأهداف والعمليات، وأوظّف أدوات الذكاء الاصطناعي التوليدي مثل ChatGPT وClaude في تحليل المعلومات وتطوير التقارير والنماذج وتحسين كفاءة سير العمل، مع مراجعة المخرجات والتحقق من دقتها قبل اعتمادها."
       ],
       "cardTitle": "بطاقة تعريف",
@@ -277,7 +277,7 @@ window.SITE = {
         },
         {
           "k": "الخبرة",
-          "v": "أكثر من 10 سنوات"
+          "v": "أكثر من 12 سنة"
         },
         {
           "k": "الشهادات المهنية",
@@ -647,7 +647,7 @@ window.SITE = {
           "بناء معادلات تصنيف تلقائية في Excel بدوال LET وSEARCH وISNUMBER، تستخرج نوع الوقف ومصرفه ومدينته ومنطقته من نص الصك.",
           "تصميم لوحة تفاعلية في Power BI بخريطة توزيع جغرافي على مناطق المملكة."
         ],
-        "result": "نال هذا العمل جائزة العمل المتميز لشهر جمادى الأولى 1447هـ.",
+        "result": "نال هذا العمل جائزة العمل المتميز لشهر جمادى الأولى 1447 هـ.",
         "award": "assets/img/award.jpg"
       },
       "gallery": [
@@ -729,7 +729,7 @@ window.SITE = {
     "cvHighlights": [
       {
         "v": "1,961",
-        "k": "صكًا وقفيًا حُصرت وصُنّفت آليًا في لوحة Power BI — جائزة العمل المتميز 1447هـ",
+        "k": "صكًا وقفيًا حُصرت وصُنّفت آليًا في لوحة Power BI — جائزة العمل المتميز 1447 هـ",
         "cat": "data"
       },
       {
@@ -747,7 +747,7 @@ window.SITE = {
   "en": {
     "meta": {
       "title": "Hatem Almahmadi — Risk Management Specialist",
-      "description": "GRCP and GRCA certified risk management specialist with 10+ years in accounting, financial reporting, compliance and data analysis."
+      "description": "GRCP and GRCA certified risk management specialist with 12+ years in accounting, financial reporting, compliance and data analysis."
     },
     "nav": {
       "home": "Home",
@@ -779,18 +779,18 @@ window.SITE = {
         "GRCP™",
         "GRCA™"
       ],
-      "line": "I build on my financial background and use data and digital tools to understand challenges and create practical solutions that improve the quality of operations and decisions.",
+      "line": "I build on my financial background and use data and digital tools to understand risks and create practical solutions that improve the quality of operations and the soundness of decisions.",
       "place": "Makkah, Saudi Arabia",
       "cta": "Get in touch",
       "cta2": "About me",
       "facts": [
         {
-          "v": "10+",
-          "k": "years in finance & compliance"
+          "v": "12+",
+          "k": "years of professional experience"
         },
         {
-          "v": "GRCP · GRCA",
-          "k": "OCEG certifications"
+          "v": "1,961",
+          "k": "endowment deeds inventoried automatically"
         },
         {
           "v": "1447 AH",
@@ -830,8 +830,8 @@ window.SITE = {
         },
         {
           "type": "Compliance",
-          "label": "Accumulated errors in VAT returns",
-          "treatment": "Corrected 2018–2024 returns as a core committee member",
+          "label": "VAT return compliance risk",
+          "treatment": "Reviewed and corrected returns within a specialised committee",
           "from": [
             4,
             5
@@ -889,7 +889,7 @@ window.SITE = {
     "about": {
       "title": "About",
       "paragraphs": [
-        "Risk management specialist with more than ten years of experience in accounting, financial reporting, compliance and data analysis. I currently work in enterprise risk management, helping identify, assess and monitor risks, develop risk registers and treatment plans, and prepare reports that support decisions.",
+        "Risk management specialist with more than twelve years of experience in accounting, financial reporting, compliance and data analysis. I currently work in enterprise risk management, helping identify, assess and monitor risks, develop risk registers and treatment plans, and prepare reports that support decisions.",
         "I draw on my financial and analytical background to understand risks and controls and link them to objectives and processes. I use generative AI tools such as ChatGPT and Claude to analyse information, develop reports and models and improve workflow efficiency — reviewing and verifying every output before it is used."
       ],
       "cardTitle": "At a glance",
@@ -904,7 +904,7 @@ window.SITE = {
         },
         {
           "k": "Experience",
-          "v": "10+ years"
+          "v": "12+ years"
         },
         {
           "k": "Certifications",
