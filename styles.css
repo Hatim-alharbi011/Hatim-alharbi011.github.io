@@ -45,6 +45,7 @@ button{font:inherit;color:inherit}
 .top{display:flex;align-items:center;gap:16px;padding:0 var(--gut);color:#fff;border-bottom:1px solid rgba(255,255,255,.08);z-index:10}
 .mark{display:flex;align-items:center;gap:10px;text-decoration:none;color:#fff;font-weight:700;font-size:1.1rem;white-space:nowrap}
 .mark svg{width:28px;height:28px;flex:none}
+.mark img{height:34px;width:auto;flex:none;display:block}
 .top__tools{display:flex;gap:8px;margin-inline-start:auto}
 .tool{background:transparent;border:1px solid rgba(255,255,255,.28);color:#fff;border-radius:999px;padding:5px 16px;font-size:.92rem;cursor:pointer;transition:background .2s,border-color .2s;white-space:nowrap}
 .tool:hover{background:rgba(255,255,255,.1)}
